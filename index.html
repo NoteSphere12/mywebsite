@@ -173,27 +173,7 @@
       Submit your notes here
     </a>
   </div>
-  <h2>Ask AI</h2>
-<input id="userInput" type="text" placeholder="Type your question" />
-<button onclick="sendMessage()">Send</button>
-
-<pre id="responseOutput"></pre>
-
-<script>
-  async function sendMessage() {
-    const input = document.getElementById('userInput').value;
-
-    const res = await fetch('/.netlify/functions/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: input })
-    });
-
-    const data = await res.json();
-    document.getElementById('responseOutput').textContent = data.reply;
-  }
-</script>
-
+ 
  
   <footer>
     <form class="contact-form" action="https://formspree.io/f/mblogegd" method="POST">
