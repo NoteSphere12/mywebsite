@@ -162,24 +162,32 @@
     z-index: 999; /* ensures it stays on top */
   }
 </style>
-<style>
-	.download-button {
+<style> .center-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f9f9f9;
+    }
+
+    .download-button {
       background-color: #4CAF50;
       color: white;
       padding: 15px 30px;
       font-size: 18px;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: background 0.3s ease;
       text-decoration: none;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .download-button:hover {
       background-color: #45a049;
+      transform: scale(1.05);
     }
-  </style>
+</style>
   <script type='text/javascript' src='//pl26593074.profitableratecpm.com/7f/d3/1a/7fd31a25ea987c032fcb9af0e34cf777.js'></script>
 <meta name="google-site-verification" content="YjYAUm4HjcD94t64hS6Il8zoq33VbUJN8Djlcwv38tU" />
 </head>
@@ -206,10 +214,13 @@
     <li class="subject-item"><a href="chemistry.html">Chemistry</a></li>
    
   </ul>
-<br>
- <a href="https://drive.google.com/file/d/1TvpxEB86zPIfWJXk3cdI6y9iFOTto2SM/view?usp=drive_link" class="download-button" download>
-    📱 Download APK
-  </a>
+<div class="center-container">
+    <a href="https://drive.google.com/file/d/1TvpxEB86zPIfWJXk3cdI6y9iFOTto2SM/view?usp=drive_link" class="download-button" download>
+      📲 Download APK
+    </a>
+  </div>
+
+
 
 
   <h1>Help others by providing them your notes</h1>
