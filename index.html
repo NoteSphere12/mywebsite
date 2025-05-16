@@ -262,9 +262,40 @@
       <button type="submit">Send</button>
     </form>
   </footer>
-<script>
-(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="SLij_b1Zjm1HzWEE8AEq-";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Noteca</title>
+</head>
+<body>
+
+  <!-- Your main site content goes here -->
+
+  <!-- Floating NotecaBot iframe + styling -->
+  <style>
+    #noteca-chatbot {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 360px;
+      height: 520px;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      z-index: 9999;
+    }
+  </style>
+
+  <iframe 
+    id="noteca-chatbot"
+    src="https://poe.com/NotecaBot"
+    allow="clipboard-write"
+  ></iframe>
+
+</body>
+</html>
+
 <script type='text/javascript' src='//dreadfulrulingextension.com/c4/f0/41/c4f0410ae6a39a8dcc74210a39b7205e.js'></script>
 </body>
 </html>
