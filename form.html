@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">  
+<<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,113 +7,39 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9fafb;
+      margin: 0;
+      background: #f2f2f2;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 2rem;
-      margin: 0;
-      height: 100vh;
-      box-sizing: border-box;
+      min-height: 100vh;
     }
-    .form-container {
-      background: #ffffff;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
+    .form-wrapper {
       width: 100%;
-      position: relative;
+      max-width: 800px;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
-    h1 {
+    iframe {
+      width: 100%;
+      height: 700px;
+      border: none;
+    }
+    h2 {
       text-align: center;
-      color: #111827;
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
-      color: #374151;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #d1d5db;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-    }
-    button[type="submit"] {
-      margin-top: 1.5rem;
-      width: 100%;
-      padding: 0.75rem;
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    button[type="submit"]:hover {
-      background-color: #1e40af;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: #e5e7eb;
-      color: #111827;
-      border: none;
-      padding: 0.4rem 0.7rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    .close-btn:hover {
-      background-color: #d1d5db;
-    }
-
-    @media (max-width: 600px) {
-      body {
-        padding: 1rem;
-        height: auto;
-      }
-      .form-container {
-        padding: 1.5rem;
-      }
+      color: #333;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
-    <button class="close-btn" onclick="closeIframe()">Close</button>
-    <h1>Contact Noteca</h1>
-    <form action="https://formspree.io/f/mblogegd" method="POST">
-      <label for="name">Name</label>
-      <input type="text" id="name" name="name" required />
-
-      <label for="email">Email</label>
-      <input type="email" id="email" name="_replyto" required />
-
-      <label for="message">Message</label>
-      <textarea id="message" name="message" rows="5" required></textarea>
-
-      <button type="submit">Send</button>
-    </form>
+  <div class="form-wrapper">
+    <h2>Noteca Contact</h2>
+    <!-- Replace the iframe below with your actual Google Form embed code -->
+    <iframe src="https://tally.so/r/n95aVY" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
   </div>
-
-  <script>
-    function closeIframe() {
-      if (window.parent !== window) {
-        window.parent.postMessage({ action: 'closeNotecaIframe' }, '*');
-      } else {
-        alert("This form is meant to be closed from inside an iframe/modal.");
-      }
-    }
-  </script>
-<a href="mailto:notesenquiry@gmail.com">If you don't receive any reply from our side within a day or two, Click here !</a>
 </body>
 </html>
