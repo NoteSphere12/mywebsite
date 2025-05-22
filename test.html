@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>JEE Mains Tough Mock Test (150 Questions)</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    background: #f7f9fc;
+  }
+  #sidebar {
+    width: 250px;
+    background: #283593;
+    color: white;
+    overflow-y: auto;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  #sidebar h2 {
+    font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  #sidebar .subject-label {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 4px;
+  }
+  #question-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  #question-nav button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 3px;
+    background: #5c6bc0;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  #question-nav button.attempted {
+    background: #43a047;
+  }
+  #question-nav button.current {
+    border: 2px solid #ffca28;
+    background: #3949ab;
+  }
+  #sidebar #summary {
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  #sidebar button#submit-test {
+    margin-top: 25px;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    background: #ef5350;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+  }
+  #main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 30px;
+    background: white;
+  }
+  #main-content h1 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #1a237e;
+  }
+  .question-block {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 15px;
+  }
+  .question-block:last-child {
+    border: none;
+  }
+  .question-text {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  .options {
+    list-style: none;
+    padding-left: 0;
+  }
+  .options li {
+    margin-bottom: 8px;
+  }
+  .options input[type="radio"] {
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  #result-section {
+    display: none;
+    margin-top: 30px;
+    padding: 20px;
+    border: 2px solid #3949ab;
+    border-radius: 6px;
+    background: #e8eaf6;
+  }
+  #result-section h2 {
+    color: #283593;
+  }
+  #result-details {
+    margin-top: 10px;
+  }
+  #result-details ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  #result-details li.correct {
+    color: green;
+    margin-bottom: 4px;
+  }
+  #result-details li.wrong {
+    color: red;
+    margin-bottom: 4px;
+  }
+  #footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 13px;
+    color: #555;
+  }
+  /* Scrollbar style for sidebar */
+  #sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+  #sidebar::-webkit-scrollbar-track {
+    background: #283593;
+  }
+  #sidebar::-webkit-scrollbar-thumb {
+    background-color: #1a237e;
+    border-radius: 3px;
+  }
+  @media (max-width: 900px) {
+    body {
+      flex-direction: column;
+    }
+    #sidebar {
+      width: 100%;
+      height: 150px;
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 10px 5px;
+    }
+    #sidebar h2 {
+      display: none;
+    }
+    #sidebar .subject-label {
+      flex: 0 0 auto;
+      margin-right: 10px;
+    }
+    #question-nav {
+      gap: 8px;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+    }
+    #question-nav button {
+      flex: 0 0 auto;
+    }
+    #main-content {
+      padding: 15px 10px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h2>Question Navigator</h2>
+  <div class="subject-label">Physics</div>
+  <div id="nav-physics" class="question-nav"></div>
+  <div class="subject-label">Chemistry</div>
+  <div id="nav-chemistry" class="question-nav"></div>
+  <div class="subject-label">Mathematics</div>
+  <div id="nav-math" class="question-nav"></div>
+  <div id="summary">
+    Attempted: <span id="attempted-count">0</span> / 150<br/>
+    <span id="score-text" style="display:none;">Score: <span id="score"></span> / 150</span>
+  </div>
+  <button id="submit-test">Submit Test</button>
+</div>
+
+<div id="main-content">
+  <h1>Mock Test For PCM (150 Questions)</h1>
+  <form id="mock-test-form">
+    <!-- Questions will be injected here -->
+  </form>
+  <div id="result-section">
+    <h2>Test Results</h2>
+    <p id="result-summary"></p>
+    <div id="result-details"></div>
+  </div>
+</div>
+
+<script>
+  // Paste your full 50 physics questions array here:
+  const physicsQ = [
+   {question: "A particle moves along x-axis such that its displacement is given by x = t³ - 6t² + 9t + 15, where x in meters and t in seconds. Find the time at which velocity is minimum.", options: ["1 s", "3 s", "2 s", "4 s"], answer: 2},
+{question: "A circular loop of radius 10 cm is rotated with an angular velocity of 400 rad/s in a uniform magnetic field of 0.1 T perpendicular to the axis. Calculate the peak emf induced in the loop.", options: ["2.5 V", "2 V", "3.14 V", "1.5 V"], answer: 0},
+{question: "The escape velocity from a planet is half the escape velocity from Earth. If the radius of the planet is twice that of Earth, what is the ratio of density of the planet to that of Earth?", options: ["1/4", "1/2", "1/8", "1/16"], answer: 2},
+{question: "Two wires of equal length and equal material are joined in series. Their diameters are in the ratio 2:3. What is the ratio of their resistances?", options: ["3:2", "9:4", "4:9", "2:3"], answer: 1},
+{question: "A satellite is moving around the Earth in a circular orbit at a height equal to the Earth's radius. The ratio of gravitational force on it at this height to that on the surface of Earth is:", options: ["1/2", "1/4", "1/8", "1/16"], answer: 1},
+{question: "A string fixed at both ends vibrates in its fundamental mode producing a frequency of 256 Hz. If the length is halved and tension doubled, the new frequency will be:", options: ["362 Hz", "512 Hz", "724 Hz", "1024 Hz"], answer: 1},
+{question: "A blackbody emits radiation with peak wavelength λ_max. If temperature of the body is doubled, the new peak wavelength will be:", options: ["λ_max/2", "λ_max/4", "2λ_max", "4λ_max"], answer: 0},
+{question: "In a double-slit experiment, the fringe width is 0.2 mm on a screen 1 m away. If the distance between slits is halved, fringe width becomes:", options: ["0.1 mm", "0.4 mm", "0.2 mm", "0.8 mm"], answer: 1},
+{question: "The minimum energy required to remove an electron from a metal surface is 4.5 eV. What is the stopping potential when light of wavelength 250 nm is incident on it? (h=6.626×10⁻³⁴ Js, c=3×10⁸ m/s)", options: ["3.5 V", "1.5 V", "2.5 V", "4.0 V"], answer: 2},
+{question: "A charged particle moves in a circular path of radius r in a magnetic field B. If the magnetic field is doubled and velocity halved, the radius becomes:", options: ["r/2", "r/4", "2r", "4r"], answer: 1},
+{question: "The moment of inertia of a solid sphere about an axis through its center is I. Moment of inertia about an axis tangential to the sphere is:", options: ["I", "2I", "5I/2", "7I/5"], answer: 2},
+{question: "Two capacitors C and 3C are connected in parallel. The equivalent capacitance is:", options: ["4C", "3C", "C", "2C"], answer: 0},
+{question: "In an RLC circuit at resonance, the power factor is:", options: ["0", "1", "Less than 1", "Greater than 1"], answer: 1},
+{question: "The half-life of a radioactive substance is 5 hours. The time taken for its activity to reduce to 1/16 of original is:", options: ["10 h", "15 h", "20 h", "25 h"], answer: 2},
+{question: "The velocity of sound in air at 0°C is 331 m/s. What is the velocity of sound at 27°C?", options: ["345 m/s", "359 m/s", "331 m/s", "300 m/s"], answer: 0},
+{question: "A gas is compressed adiabatically to half its volume. If initial pressure is P, the final pressure will be (γ = 1.4):", options: ["P × 2^1.4", "P × 2^0.4", "P × 2^1.0", "P × 2^1.7"], answer: 0},
+{question: "A wire carrying current I is bent into a circle of radius r. The magnetic moment of the loop is:", options: ["Iπr²", "2Iπr²", "I/2πr²", "Iπr"], answer: 0},
+{question: "Work done in stretching a wire of length L and cross-sectional area A by an amount ΔL is proportional to:", options: ["ΔL", "ΔL²", "ΔL³", "√ΔL"], answer: 1},
+{question: "An ideal gas undergoes an isothermal expansion from volume V to 2V. The work done is:", options: ["nRT ln2", "nRT", "2 nRT", "nRT/2"], answer: 0},
+{question: "A particle is moving in SHM with amplitude A and angular frequency ω. Its maximum acceleration is:", options: ["ω²/A", "Aω²", "A/ω²", "ω/A"], answer: 1},
+{question: "A proton and alpha particle have the same kinetic energy. The ratio of their de Broglie wavelengths is:", options: ["1:2", "2:1", "1:4", "4:1"], answer: 1},
+{question: "If the radius of orbit of electron in hydrogen atom is doubled, the energy of electron changes by:", options: ["-3/4 E₁", "-1/2 E₁", "-1/4 E₁", "E₁"], answer: 0},
+{question: "The speed of light in medium is 2×10⁸ m/s. The refractive index of medium is:", options: ["1.5", "0.67", "2", "3"], answer: 0},
+{question: "A thermodynamic system does 200 J of work and loses 100 J of heat. The change in internal energy is:", options: ["-300 J", "-100 J", "100 J", "300 J"], answer: 0},
+{question: "Two point charges q and 4q are placed 3 m apart. The point where net electric field is zero lies from q at:", options: ["1 m", "2 m", "0.75 m", "2.5 m"], answer: 1},
+{question: "The angular velocity of a particle performing circular motion increases linearly with time as ω = kt. The angle swept in time t is:", options: ["1/2 kt²", "kt", "kt³", "1/3 kt³"], answer: 3},
+{question: "The rms speed of nitrogen molecules at temperature T is v. The temperature at which rms speed becomes 2v is:", options: ["4T", "2T", "T/2", "T/4"], answer: 0},
+{question: "A particle in SHM has displacement x = A cos(ωt + φ). The phase constant φ is such that the particle starts from x = 0 with positive velocity. The value of φ is:", options: ["0", "π/2", "π", "-π/2"], answer: 3},
+{question: "The energy levels of a hydrogen-like atom are given by E_n = -13.6 Z²/n² eV. The ionization energy of He⁺ is:", options: ["54.4 eV", "27.2 eV", "13.6 eV", "6.8 eV"], answer: 0},
+{question: "A particle of mass m is dropped from height h. The time taken to reach the ground is t. If the particle is thrown downward with velocity u from height h, the time taken is:", options: ["(√(2h/g))", "(-u + √(u² + 2gh))/g", "(u + √(u² + 2gh))/g", "(2h/g)"], answer: 1},
+{question: "In Young’s double slit experiment, if the screen distance is doubled, fringe width changes by:", options: ["Doubles", "Halves", "No change", "Quadruples"], answer: 0},
+{question: "A coil of resistance R and inductance L is connected to an AC source. The current lags voltage by 45°. The inductive reactance is:", options: ["R", "Lω", "R/√2", "Lω/√2"], answer: 0},
+{question: "A particle moves such that its acceleration is proportional to the displacement but in opposite direction. The motion is:", options: ["Uniform", "Simple Harmonic", "Uniformly Accelerated", "Non-uniform"], answer: 1},
+{question: "In a transistor, the current gain β is 99 and base current is 10 μA. The collector current is:", options: ["1 mA", "990 μA", "1.1 mA", "100 μA"], answer: 0},
+{question: "Work function of a metal is 3 eV. The maximum wavelength of incident radiation to produce photoelectrons is:", options: ["413 nm", "620 nm", "310 nm", "500 nm"], answer: 0},
+{question: "The frequency of a pendulum is 2 Hz. Its time period is:", options: ["0.25 s", "0.5 s", "2 s", "4 s"], answer: 1},
+{question: "In a gas, the average kinetic energy of a molecule at temperature T is E. The temperature when average kinetic energy is doubled is:", options: ["2T", "√2 T", "T/2", "4T"], answer: 0},
+{question: "The equivalent capacitance of three capacitors 1μF, 2μF, and 3μF connected in series is:", options: ["0.55 μF", "6 μF", "0.5 μF", "1 μF"], answer: 2},
+{question: "A uniform rod of length L is pivoted at one end. The moment of inertia about the pivot is:", options: ["(1/3) mL²", "(1/12) mL²", "(1/4) mL²", "mL²"], answer: 0},
+{question: "The velocity of sound is greatest in:", options: ["Air", "Water", "Steel", "Vacuum"], answer: 2},
+{question: "A wheel is rotating with angular velocity ω. The centripetal acceleration at radius r is:", options: ["ωr", "ω²r", "r/ω", "ω²/r"], answer: 1},
+{question: "Two waves of the same frequency and amplitude interfere destructively. The phase difference between them is:", options: ["π/2", "π", "0", "2π"], answer: 1},
+{question: "The bending of light around corners is called:", options: ["Refraction", "Diffraction", "Reflection", "Interference"], answer: 1},
+{question: "The potential energy of a charged capacitor is:", options: ["(1/2) CV²", "CV", "C/V", "VC"], answer: 0},
+{question: "The angle of deviation is minimum in:", options: ["Reflection", "Refraction", "Prism", "Diffraction"], answer: 2},
+{question: "The frequency of revolution of electron in the first Bohr orbit of hydrogen atom is approximately:", options: ["6.58×10¹⁵ Hz", "1.31×10¹⁶ Hz", "2.19×10¹⁴ Hz", "3.29×10¹⁵ Hz"], answer: 3},
+{question: "The magnetic field at the center of a circular loop carrying current I and radius R is:", options: ["μ₀I/2R", "μ₀I/2πR", "μ₀IR/2", "μ₀I/4πR"], answer: 0},
+{question: "In a photoelectric effect experiment, the kinetic energy of emitted electrons increases with:", options: ["Increasing intensity", "Increasing frequency", "Increasing voltage", "Increasing wavelength"], answer: 1},
+{question: "The drift velocity of electrons in a conductor is:", options: ["10⁻⁴ m/s", "10⁴ m/s", "10⁻⁶ m/s", "10⁻² m/s"], answer: 0},
+{question: "The force between two parallel current carrying wires is repulsive if the currents are:", options: ["In opposite direction", "In same direction", "Zero", "Perpendicular"], answer: 0},
+  ];
+
+  // Paste your full 50 chemistry questions array here:
+  const chemistryQ = [
+    {question: "The correct order of acidity for the following compounds is:", options: ["CH3COOH > HCOOH > HF", "HF > HCOOH > CH3COOH", "HCOOH > HF > CH3COOH", "HF > CH3COOH > HCOOH"], answer: 1},
+{question: "Which of the following has the highest boiling point?", options: ["H2O", "HF", "NH3", "CH4"], answer: 0},
+{question: "In the reaction 2 NO2 ⇌ N2O4, the equilibrium constant Kp is related to Kc as:", options: ["Kp = Kc(RT)", "Kp = Kc/(RT)", "Kp = Kc(RT)⁻¹", "Kp = Kc(RT)²"], answer: 2},
+{question: "Which of the following species is paramagnetic?", options: ["CO", "O2", "N2", "NO"], answer: 1},
+{question: "The hybridization of the central atom in XeF4 is:", options: ["sp3", "sp3d", "sp3d2", "sp2"], answer: 2},
+{question: "The rate law for the reaction A + B → products is found to be rate = k[A]²[B]. The order of reaction is:", options: ["1", "2", "3", "0"], answer: 2},
+{question: "The volume of 1 mole of an ideal gas at STP is:", options: ["22.4 L", "24.0 L", "20.0 L", "25.0 L"], answer: 0},
+{question: "Which of the following elements shows the highest electronegativity?", options: ["F", "O", "N", "Cl"], answer: 0},
+{question: "The number of stereoisomers possible for a compound with n chiral centers is:", options: ["n", "2ⁿ", "n²", "2n"], answer: 1},
+{question: "The molarity of a 10% (w/v) solution of NaCl (Molar mass = 58.5 g/mol) is approximately:", options: ["1.7 M", "0.17 M", "5.85 M", "17 M"], answer: 0},
+{question: "Which one of the following is a reducing sugar?", options: ["Sucrose", "Glucose", "Cellulose", "Starch"], answer: 1},
+{question: "The common oxidation state of Cr in its compounds is:", options: ["+2", "+3", "+6", "+4"], answer: 2},
+{question: "The pH of a 0.001 M HCl solution is:", options: ["3", "1", "0.001", "7"], answer: 0},
+{question: "Which gas is evolved when zinc reacts with dilute H2SO4?", options: ["H2", "O2", "SO2", "NO2"], answer: 0},
+{question: "The crystal structure of NaCl is:", options: ["FCC", "BCC", "Simple Cubic", "HCP"], answer: 0},
+{question: "The number of valence electrons in phosphorus is:", options: ["3", "5", "7", "8"], answer: 1},
+{question: "The IUPAC name of CH3-CH=CH-CH3 is:", options: ["Butene", "1-Butene", "2-Butene", "Butane"], answer: 2},
+{question: "Which of the following has the highest ionization energy?", options: ["Na", "Mg", "Al", "Si"], answer: 1},
+{question: "The number of moles in 11 g of CO2 is:", options: ["0.25", "0.5", "0.75", "1"], answer: 1},
+{question: "Which of the following is an example of an amphoteric oxide?", options: ["Al2O3", "CO2", "SO2", "Na2O"], answer: 0},
+{question: "The reaction rate doubles when temperature is increased by 10°C. This is because:", options: ["Activation energy decreases", "Frequency of collisions increases", "Kinetic energy of molecules increases", "All of these"], answer: 3},
+{question: "Which of the following compounds exhibits hydrogen bonding?", options: ["CH3OH", "CH4", "C2H6", "CCl4"], answer: 0},
+{question: "The compound with the formula C2H4O2 and exhibits acidic behavior is:", options: ["Acetic acid", "Acetaldehyde", "Acetone", "Ethanol"], answer: 0},
+{question: "In electrolysis of molten NaCl, the cathode product is:", options: ["Na", "Cl2", "H2", "O2"], answer: 0},
+{question: "The oxidation number of Mn in KMnO4 is:", options: ["+7", "+6", "+4", "+2"], answer: 0},
+{question: "The major product of the reaction between benzene and nitric acid in presence of H2SO4 is:", options: ["Nitrobenzene", "Phenol", "Aniline", "Benzaldehyde"], answer: 0},
+{question: "Which of the following molecules is non-polar despite having polar bonds?", options: ["CO2", "H2O", "NH3", "HF"], answer: 0},
+{question: "The lattice energy of ionic compounds depends on:", options: ["Charge of ions", "Size of ions", "Both charge and size", "None of these"], answer: 2},
+{question: "The gas that causes greenhouse effect is:", options: ["CO2", "O2", "N2", "H2"], answer: 0},
+{question: "The structure of graphite is:", options: ["Layered hexagonal", "Tetrahedral", "Cubic", "Amorphous"], answer: 0},
+{question: "Which is the strongest acid among the following?", options: ["HCl", "H2SO4", "HNO3", "HF"], answer: 1},
+{question: "The spin quantum number for electrons is:", options: ["0", "+1/2 or -1/2", "1", "-1"], answer: 1},
+{question: "The total number of electrons in an O2 molecule is:", options: ["12", "14", "16", "18"], answer: 2},
+{question: "Which reaction is exothermic?", options: ["Combustion", "Photosynthesis", "Melting", "Evaporation"], answer: 0},
+{question: "The oxidation state of sulfur in H2SO4 is:", options: ["+6", "+4", "+2", "-2"], answer: 0},
+{question: "The process of converting a solid directly into gas is called:", options: ["Sublimation", "Condensation", "Vaporization", "Melting"], answer: 0},
+{question: "Which of the following is a strong reducing agent?", options: ["NaBH4", "H2O2", "O3", "Cl2"], answer: 0},
+{question: "The molar mass of gas X is 44 g/mol at 27°C and 1 atm. Its density (g/L) is:", options: ["1.8", "2.0", "1.2", "3.0"], answer: 1},
+{question: "The equilibrium constant expression for the reaction N2 + 3H2 ⇌ 2NH3 is:", options: ["[NH3]²/[N2][H2]³", "[N2][H2]³/[NH3]²", "[NH3]/[N2][H2]", "[N2][H2]/[NH3]"], answer: 0},
+{question: "Which element is used as a standard for atomic mass?", options: ["Carbon-12", "Hydrogen", "Oxygen-16", "Uranium"], answer: 0},
+{question: "The pKa of acetic acid is approximately:", options: ["4.76", "7.0", "3.5", "5.2"], answer: 0},
+{question: "Which of the following is an example of a coordination compound?", options: ["[Fe(CN)6]4-", "NaCl", "H2O", "CO2"], answer: 0},
+{question: "In the periodic table, atomic radius generally:", options: ["Increases down a group", "Decreases down a group", "Increases across a period", "Remains constant"], answer: 0},
+{question: "The hybridization of carbon in C2H2 (acetylene) is:", options: ["sp", "sp2", "sp3", "None"], answer: 0},
+{question: "The reagent used for nitration of benzene is:", options: ["HNO3 and H2SO4", "HCl", "Br2", "NaOH"], answer: 0},
+{question: "The molar conductivity of an electrolyte is expressed in units of:", options: ["S cm² mol⁻¹", "Ω cm", "Ω⁻¹", "S cm"], answer: 0},
+{question: "The oxidation number of chlorine in NaClO3 is:", options: ["+5", "+3", "+7", "+1"], answer: 0},
+{question: "Which element has the highest first ionization energy?", options: ["He", "Ne", "F", "O"], answer: 0},
+{question: "The bond angle in water molecule is approximately:", options: ["104.5°", "90°", "120°", "180°"], answer: 0},
+{question: "The boiling point of water is highest due to:", options: ["Hydrogen bonding", "Van der Waals forces", "Ionic bonds", "Covalent bonds"], answer: 0},
+{question: "Which of the following is used as a catalyst in the Haber process?", options: ["Iron", "Copper", "Platinum", "Nickel"], answer: 0},
+{question: "The compound with molecular formula C4H8 and a double bond is called:", options: ["Butene", "Butane", "Butyne", "Butadiene"], answer: 0},
+  ];
+
+  // Paste your full 50 mathematics questions array here:
+  const mathQ = [
+   {question: "If the roots of the equation x² - 5x + k = 0 are in GP, find k.", options: ["6", "8", "9", "10"], answer: 2},
+{question: "Evaluate the limit: lim (x→0) (sin 3x)/(sin 5x).", options: ["3/5", "5/3", "1", "0"], answer: 0},
+{question: "The sum of first n terms of a series is given by S_n = 2n² + 3n. Find the nth term.", options: ["4n + 3", "4n - 1", "4n + 1", "2n² + 3"], answer: 2},
+{question: "If A = [[1,2],[3,4]], find det(3A).", options: ["81", "54", "27", "9"], answer: 0},
+{question: "The function f(x) = x³ - 3x + 1 has how many local maxima and minima?", options: ["One maximum, one minimum", "Two maxima", "Two minima", "No extrema"], answer: 0},
+{question: "Find the equation of the circle passing through (1,0), (0,1) and center lying on x + y = 1.", options: ["x² + y² - x - y = 0", "x² + y² - 2x - 2y + 1 = 0", "x² + y² + x + y = 0", "x² + y² - x + y = 0"], answer: 0},
+{question: "The vector product of vectors a and b is perpendicular to:", options: ["a only", "b only", "both a and b", "neither a nor b"], answer: 2},
+{question: "The integral ∫ (1/(1 + x²)) dx equals:", options: ["tan⁻¹ x + C", "ln|x| + C", "sin⁻¹ x + C", "-1/(1+x²) + C"], answer: 0},
+{question: "Find the radius of convergence of the series ∑ (x^n)/n!", options: ["∞", "1", "0", "e"], answer: 0},
+{question: "If sin A + sin B = 1 and cos A + cos B = 1, find the value of A - B.", options: ["π/2", "π", "0", "π/4"], answer: 0},
+{question: "If y = x^x, then dy/dx equals:", options: ["x^x (1 + ln x)", "x^x ln x", "x^x / x", "ln x"], answer: 0},
+{question: "The equation of the tangent to the curve y = x² at x = 2 is:", options: ["y = 4x - 4", "y = 2x - 4", "y = 4x + 4", "y = x + 4"], answer: 0},
+{question: "The sum of infinite geometric series with first term a and common ratio r is 8. If a + r = 5, find ar.", options: ["4", "6", "5", "3"], answer: 0},
+{question: "If a matrix A satisfies A² = I, then eigenvalues of A are:", options: ["±1", "0 and 1", "Only 1", "Only 0"], answer: 0},
+{question: "The number of ways to arrange the letters of the word 'MISSISSIPPI' is:", options: ["34650", "34655", "34660", "34665"], answer: 0},
+{question: "The solution of the differential equation dy/dx = y/x is:", options: ["y = kx", "y = ke^x", "y = k/x", "y = k"], answer: 0},
+{question: "If the roots of x² + px + q = 0 are α and β, then α³ + β³ equals:", options: ["-p³ + 3pq", "-p³ - 3pq", "p³ - 3pq", "p³ + 3pq"], answer: 0},
+{question: "Find the maximum value of y = sin x + cos x.", options: ["√2", "1", "0", "2"], answer: 0},
+{question: "If sin A = 3/5 and A is in 2nd quadrant, then cos A equals:", options: ["-4/5", "4/5", "-3/5", "3/5"], answer: 0},
+{question: "If the determinant of a 3x3 matrix is zero, then the vectors represented by its rows are:", options: ["Linearly dependent", "Linearly independent", "Orthogonal", "None of these"], answer: 0},
+{question: "The volume of the solid generated by revolving the region bounded by y = x² and y = x around the x-axis is:", options: ["π/30", "π/15", "π/10", "π/5"], answer: 0},
+{question: "The probability of getting exactly 3 heads in 5 tosses of a coin is:", options: ["10/32", "5/32", "1/32", "15/32"], answer: 0},
+{question: "Find the value of ∫₀¹ (x^3 + 1) dx.", options: ["1.25", "1.5", "1.0", "2.0"], answer: 0},
+{question: "If A and B are independent events with P(A) = 0.5 and P(B) = 0.6, then P(A ∪ B) is:", options: ["0.8", "0.3", "0.9", "1.1"], answer: 0},
+{question: "The equation of the parabola with focus at (0,2) and directrix y = -2 is:", options: ["x² = 8y", "y² = 8x", "x² = 4y", "y² = 4x"], answer: 0},
+{question: "The inverse of matrix [[1,2],[3,4]] is:", options: ["[[-2,1],[1.5,-0.5]]", "[[2,-1],[-1.5,0.5]]", "[[0,1],[1,0]]", "[[1,0],[0,1]]"], answer: 0},
+{question: "If f(x) = x² + 3x + 1, find f'(2).", options: ["7", "8", "10", "6"], answer: 1},
+{question: "If A is a 2x2 matrix with eigenvalues 3 and 5, then det(A) equals:", options: ["15", "8", "2", "0"], answer: 0},
+{question: "If tan θ = 3/4, then sin 2θ equals:", options: ["24/25", "7/25", "15/25", "10/25"], answer: 0},
+{question: "The integral of e^x sin x dx is:", options: ["e^x (sin x - cos x)/2 + C", "e^x (sin x + cos x)/2 + C", "e^x sin x + C", "e^x cos x + C"], answer: 0},
+{question: "The number of ways to select 3 students out of 10 is:", options: ["120", "60", "30", "10"], answer: 0},
+{question: "Find the solution of the system: x + y = 3, 2x - y = 0.", options: ["x=1, y=2", "x=2, y=1", "x=3, y=0", "x=0, y=3"], answer: 1},
+{question: "The range of the function f(x) = x² - 4x + 3 is:", options: ["(-∞, 3]", "[ -1, ∞ )", "[ -∞, -1]", "( -∞, ∞ )"], answer: 0},
+{question: "The roots of the equation x² + x + 1 = 0 are:", options: ["Complex conjugates", "Real and distinct", "Real and equal", "Imaginary"], answer: 0},
+{question: "Find the coefficient of x³ in the expansion of (1 + x)^5.", options: ["10", "5", "1", "15"], answer: 0},
+{question: "If the arithmetic mean of 5 numbers is 20, their sum is:", options: ["100", "25", "50", "200"], answer: 0},
+{question: "The equation of the line passing through (1,2) with slope 3 is:", options: ["y = 3x - 1", "y = 3x + 1", "y = x + 3", "y = 3x + 2"], answer: 0},
+{question: "The solution of log(x) = 2 is:", options: ["100", "10", "2", "0"], answer: 1},
+{question: "If the sum of interior angles of a polygon is 1260°, then the number of sides is:", options: ["9", "10", "11", "12"], answer: 1},
+{question: "The standard deviation of the data set {2,4,6,8,10} is:", options: ["2.83", "2.5", "3", "2"], answer: 0},
+{question: "The derivative of cos x is:", options: ["-sin x", "sin x", "-cos x", "cos x"], answer: 0},
+{question: "The number of permutations of 4 letters chosen from the word 'APPLE' is:", options: ["12", "24", "60", "120"], answer: 2},
+{question: "The equation x² + y² = 1 represents:", options: ["Circle", "Ellipse", "Parabola", "Hyperbola"], answer: 0},
+{question: "If two events are mutually exclusive, then P(A ∩ B) equals:", options: ["0", "1", "P(A) + P(B)", "P(A)P(B)"], answer: 0},
+{question: "The minimum value of x² - 4x + 5 is:", options: ["1", "0", "4", "5"], answer: 0}
+  ];
+
+  // Combine all 150 questions:
+  const allQuestions = [...physicsQ, ...chemistryQ, ...mathQ];
+  const totalQuestions = allQuestions.length;
+
+  const form = document.getElementById('mock-test-form');
+  const navPhysics = document.getElementById('nav-physics');
+  const navChemistry = document.getElementById('nav-chemistry');
+  const navMath = document.getElementById('nav-math');
+  const attemptedCountElem = document.getElementById('attempted-count');
+  const submitBtn = document.getElementById('submit-test');
+  const resultSection = document.getElementById('result-section');
+  const resultSummary = document.getElementById('result-summary');
+  const resultDetails = document.getElementById('result-details');
+  const scoreText = document.getElementById('score-text');
+  const scoreElem = document.getElementById('score');
+
+  let currentQuestion = 0;
+  let answers = new Array(totalQuestions).fill(null);
+
+  // Render questions to form
+  function renderQuestions() {
+    form.innerHTML = '';
+    allQuestions.forEach((q, index) => {
+      const questionBlock = document.createElement('div');
+      questionBlock.className = 'question-block';
+      questionBlock.id = 'q-' + index;
+
+      const questionText = document.createElement('div');
+      questionText.className = 'question-text';
+      questionText.textContent = `${index + 1}. ${q.question}`;
+      questionBlock.appendChild(questionText);
+
+      const ul = document.createElement('ul');
+      ul.className = 'options';
+
+      q.options.forEach((opt, i) => {
+        const li = document.createElement('li');
+
+        const label = document.createElement('label');
+        label.style.cursor = 'pointer';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = `question${index}`;
+        input.value = i;
+        input.addEventListener('change', () => {
+          answers[index] = i;
+          updateNavButtons();
+          updateAttemptedCount();
+        });
+
+        label.appendChild(input);
+        label.appendChild(document.createTextNode(opt));
+
+        li.appendChild(label);
+        ul.appendChild(li);
+      });
+
+      questionBlock.appendChild(ul);
+      form.appendChild(questionBlock);
+    });
+    scrollToQuestion(currentQuestion);
+  }
+
+  // Scroll to the given question index
+  function scrollToQuestion(index) {
+    const questionBlock = document.getElementById('q-' + index);
+    if (questionBlock) {
+      questionBlock.scrollIntoView({behavior: 'smooth', block: 'center'});
+      currentQuestion = index;
+      updateNavButtons();
+    }
+  }
+
+  // Build question navigation buttons in sidebar
+  function buildNav() {
+    function createButtons(container, startIdx, count) {
+      for(let i = startIdx; i < startIdx + count; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i + 1;
+        btn.addEventListener('click', () => {
+          scrollToQuestion(i);
+        });
+        container.appendChild(btn);
+      }
+    }
+    createButtons(navPhysics, 0, physicsQ.length);
+    createButtons(navChemistry, physicsQ.length, chemistryQ.length);
+    createButtons(navMath, physicsQ.length + chemistryQ.length, mathQ.length);
+  }
+
+  // Update nav buttons styles for attempted/current
+  function updateNavButtons() {
+    function updateButtons(container, startIdx, count) {
+      const buttons = container.querySelectorAll('button');
+      buttons.forEach((btn, i) => {
+        const qIndex = startIdx + i;
+        btn.classList.remove('attempted', 'current');
+        if (answers[qIndex] !== null) btn.classList.add('attempted');
+        if (qIndex === currentQuestion) btn.classList.add('current');
+      });
+    }
+    updateButtons(navPhysics, 0, physicsQ.length);
+    updateButtons(navChemistry, physicsQ.length, chemistryQ.length);
+    updateButtons(navMath, physicsQ.length + chemistryQ.length, mathQ.length);
+  }
+
+  // Update attempted count display
+  function updateAttemptedCount() {
+    const attempted = answers.filter(a => a !== null).length;
+    attemptedCountElem.textContent = attempted;
+  }
+
+  // Submit test and show result
+  function submitTest() {
+    let correct = 0;
+    resultDetails.innerHTML = '';
+    allQuestions.forEach((q, i) => {
+      const userAns = answers[i];
+      const li = document.createElement('li');
+      if(userAns === q.answer){
+        correct++;
+        li.className = 'correct';
+        li.textContent = `Q${i+1}: Correct`;
+      } else {
+        li.className = 'wrong';
+        li.textContent = `Q${i+1}: Wrong (Your answer: ${userAns !== null ? q.options[userAns] : "No answer"}, Correct: ${q.options[q.answer]})`;
+      }
+      resultDetails.appendChild(li);
+    });
+
+    scoreElem.textContent = correct;
+    scoreText.style.display = 'inline';
+    resultSummary.textContent = `You attempted ${answers.filter(a => a !== null).length} questions and scored ${correct} out of ${totalQuestions}.`;
+    resultSection.style.display = 'block';
+    // Scroll to result
+    resultSection.scrollIntoView({behavior: 'smooth'});
+  }
+
+  // Init page
+  renderQuestions();
+  buildNav();
+  updateNavButtons();
+  updateAttemptedCount();
+
+  submitBtn.addEventListener('click', () => {
+    if(confirm("Are you sure you want to submit the test? You cannot change answers after submission.")) {
+      submitTest();
+    }
+  });
+
+</script>
+
+<div id="footer">
+  © 2025 Mock test platform Noteca. All rights reserved.<br/>
+</div>
+
+</body>
+</html>
